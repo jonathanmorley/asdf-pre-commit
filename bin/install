@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+if [[ "${ASDF_INSTALL_TYPE:-version}" == 'ref' ]]; then
+  echo >&2 "⛔ This plugin does not support installing by ref."
+  exit 1
+fi
+
+pip install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"
