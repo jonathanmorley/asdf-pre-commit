@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+asdf plugin test pre-commit . pre-commit --version

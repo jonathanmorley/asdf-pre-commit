@@ -2,8 +2,24 @@
 
 set -Eeuo pipefail
 
-curl -Lqs https://pypi.org/pypi/pre-commit/json |
-  grep -Eo '"\d+\.\d+\.\d+":' |
-  cut -d\" -f2 |
-  sort --version-sort |
-  xargs
+# See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
+function fetch() {
+  cmd="curl -sL"
+  if [ -n "${GITHUB_API_TOKEN:-}" ]; then
+    $cmd "-H 'Authorization: token $GITHUB_API_TOKEN'" $@
+  else
+    $cmd $@
+  fi
+}
+
+# See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#binlist-all
+function sort_versions() {
+  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' | \
+    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
+}
+
+# See https://github.com/td7x/asdf-terragrunt/blob/master/bin/list-all#L11
+fetch "https://api.github.com/repos/pre-commit/pre-commit/releases" \
+    | grep -oE "tag_name\": \".{1,15}\"," \
+    | sed 's/tag_name\": \"v//;s/\",//' \
+    | sort_versions

@@ -15,10 +15,9 @@ The following utilities are required:
 - `bash`
 - `curl`
 - `grep`
-- `cut`
 - `sort`
+- `awk`
 - `xargs`
-- `pip`
 
 ## Installing
 
