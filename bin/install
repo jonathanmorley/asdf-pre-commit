@@ -4,11 +4,10 @@ set -Eeuo pipefail
 
 # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
 function fetch() {
-  cmd="curl -sL"
-  if [ -n "${GITHUB_API_TOKEN:-}" ]; then
-    $cmd "-H 'Authorization: token $GITHUB_API_TOKEN'" "$@"
+  if [[ -v GITHUB_API_TOKEN ]]; then
+    curl -sL "-H 'Authorization: token ${GITHUB_API_TOKEN}'" "$@"
   else
-    $cmd "$@"
+    curl -sL "$@"
   fi
 }
 
