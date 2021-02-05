@@ -5,7 +5,7 @@ set -Eeuo pipefail
 # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
 function fetch() {
   if [[ -n "${GITHUB_API_TOKEN:-}" ]]; then
-    curl -LsH "Authorization: token ${GITHUB_API_TOKEN}" "$@"
+    curl -Ls ${GITHUB_API_TOKEN:+-H "Authorization: token ${GITHUB_API_TOKEN}"} "$@"
   else
     curl -Ls "$@"
   fi
@@ -15,4 +15,4 @@ fetch "https://api.github.com/repos/pre-commit/pre-commit/releases" |
   grep -Eo '"tag_name":\s*"[^"]+"' |
   cut -d\" -f4 |
   cut -c2- |
-  sort --version-sort
+  tac

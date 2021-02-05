@@ -16,7 +16,7 @@ The following utilities are required:
 - `curl`
 - `grep`
 - `cut`
-- `sort`
+- `tac`
 - `chmod`
 - `mkdir`
 

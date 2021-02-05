@@ -2,25 +2,12 @@
 
 set -Eeuo pipefail
 
-# See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
-function fetch() {
-  if [[ -n "${GITHUB_API_TOKEN:-}" ]]; then
-    curl -L -H "Authorization: token ${GITHUB_API_TOKEN}" "$@"
-  else
-    curl -L "$@"
-  fi
-}
-
-if [[ "${ASDF_INSTALL_TYPE:-version}" == 'ref' ]]; then
-  echo >&2 "⛔ This plugin does not support installing by ref."
-  exit 1
+if [[ -z "${ASDF_DOWNLOAD_PATH:-}" ]]; then
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  export ASDF_DOWNLOAD_PATH="${ASDF_INSTALL_PATH}"
+  
+  source "${DIR}/download"
 fi
 
-mkdir -p "${ASDF_INSTALL_PATH}"
-
-echo "Downloading pre-commit v${ASDF_INSTALL_VERSION}"
-
-fetch \
-  "https://github.com/pre-commit/pre-commit/releases/download/v${ASDF_INSTALL_VERSION}/pre-commit-${ASDF_INSTALL_VERSION}.pyz" \
-  -o "${ASDF_INSTALL_PATH}/pre-commit"
-chmod +x "${ASDF_INSTALL_PATH}/pre-commit"
+mkdir -p "${ASDF_INSTALL_PATH}/bin"
+mv "${ASDF_DOWNLOAD_PATH}/pre-commit" "${ASDF_INSTALL_PATH}/bin/pre-commit"
