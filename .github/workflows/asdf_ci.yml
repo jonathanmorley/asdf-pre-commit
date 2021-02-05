@@ -25,8 +25,9 @@ jobs:
         with:
           # The python version to configure
           python-version: ${{ matrix.python }}
+      # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
       - name: asdf_plugin_test
-        uses: asdf-vm/actions/plugin-test@v1.0.0
+        uses: asdf-vm/actions/plugin-test@v1
         with:
           command: pre-commit --version
         env:
