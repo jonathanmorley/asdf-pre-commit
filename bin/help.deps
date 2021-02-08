@@ -2,7 +2,7 @@ bash
 curl
 grep
 cut
-tac
+sort
 chmod
 python
 mkdir
