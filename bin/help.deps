@@ -1,4 +1,8 @@
-bash
+#!/usr/bin/env bash
+
+set -Eeo pipefail
+
+echo "bash
 curl
 grep
 cut
@@ -7,4 +11,4 @@ chmod
 python
 mkdir
 mv
-xargs
+xargs"
