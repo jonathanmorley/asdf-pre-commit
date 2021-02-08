@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
 set -Eeo pipefail
+
+echo "An asdf plugin for pre-commit: A framework for managing and maintaining multi-language pre-commit hooks."
