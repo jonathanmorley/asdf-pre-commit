@@ -2,15 +2,9 @@ name: ASDF CI
 
 on:
   push:
-    paths-ignore:
-      - "**.md"
-      - ".all-contributorsrc"
+    branches: [master]
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - ".all-contributorsrc"
-  schedule:
-    - cron: "0 0 * * 5"
+    branches: [master]
 
 jobs:
   plugin-test:
@@ -25,8 +19,9 @@ jobs:
         with:
           # The python version to configure
           python-version: ${{ matrix.python }}
+      # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
       - name: asdf_plugin_test
-        uses: asdf-vm/actions/plugin-test@v1.0.0
+        uses: asdf-vm/actions/plugin-test@v1
         with:
           command: pre-commit --version
         env:
@@ -37,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run ShellCheck
-        run: shellcheck bin/*
+        run: shellcheck bin/download bin/exec-env bin/install bin/list-all
   format:
     runs-on: macos-latest
     steps:

@@ -7,18 +7,7 @@
 ## Requirements
 
 This plugin should work on Linux and Mac operating systems.
-
-### Utilities
-
-The following utilities are required:
-
-- `bash`
-- `curl`
-- `grep`
-- `cut`
-- `sort`
-- `xargs`
-- `pip`
+See [`bin/help.deps`](bin/help.deps) for required tools
 
 ## Installing
 
