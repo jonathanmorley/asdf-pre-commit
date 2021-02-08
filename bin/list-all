@@ -11,4 +11,5 @@ fetch "https://api.github.com/repos/pre-commit/pre-commit/releases" |
   grep -Eo '"tag_name":\s*"[^"]+"' |
   cut -d\" -f4 |
   cut -c2- |
-  sort --version-sort
+  sort --version-sort |
+  xargs
