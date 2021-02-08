@@ -3,9 +3,10 @@
 set -Eeuo pipefail
 
 if [[ -z "${ASDF_DOWNLOAD_PATH:-}" ]]; then
-  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
   export ASDF_DOWNLOAD_PATH="${ASDF_INSTALL_PATH}"
-  
+
+  # shellcheck source=bin/download
   source "${DIR}/download"
 fi
 
