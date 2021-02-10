@@ -9,16 +9,16 @@ function fetch() {
 
 function get_next() {
   fetch --head "$@" |
-    grep -i "^link" |  # find the link header
-    cut -d: -f2- |  # value of the header
-    tr , \\n |  # split the links
-    grep 'rel="next"' |  # find the next link
-    awk -F '<|>' '{ print $2 }'  # extract URL from between angle-brackets
+    grep -i "^link" |           # find the link header
+    cut -d: -f2- |              # value of the header
+    tr , \\n |                  # split the links
+    grep 'rel="next"' |         # find the next link
+    awk -F '<|>' '{ print $2 }' # extract URL from between angle-brackets
 }
 
 function fetch_paged() {
   curr=$1
-  
+
   while :; do
     fetch "${curr}"
     curr="$(get_next ${curr})" || break
@@ -32,8 +32,8 @@ function sort_versions() {
 }
 
 fetch_paged "https://api.github.com/repos/pre-commit/pre-commit/releases" |
-  grep -Eo '"tag_name":\s*"[^"]+"' |  # find tags
-  cut -d\" -f4 |  # get value from within second pair of quotes
-  cut -c2- |  # remove leading 'v'
-  sort_versions |  # sort
-  xargs  # remove newlines
+  grep -Eo '"tag_name":\s*"[^"]+"' | # find tags
+  cut -d\" -f4 |                     # get value from within second pair of quotes
+  cut -c2- |                         # remove leading 'v'
+  sort_versions |                    # sort
+  xargs                              # remove newlines
