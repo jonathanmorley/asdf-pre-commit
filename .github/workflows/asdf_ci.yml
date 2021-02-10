@@ -21,6 +21,11 @@ jobs:
         version:
           - '1.16.1'  # earliest
           - 'latest'
+        exclude:
+          # pre-commit no longer supports python2
+          - python: '2.x'
+            version: 'latest'
+
     runs-on: ${{ matrix.os }}
     steps:
       - name: Remove python
