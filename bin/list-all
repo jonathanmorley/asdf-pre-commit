@@ -21,7 +21,7 @@ function fetch_paged() {
 
   while :; do
     fetch "${curr}"
-    curr="$(get_next ${curr})" || break
+    curr="$(get_next "${curr}")" || break
   done
 }
 
