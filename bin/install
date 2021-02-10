@@ -16,8 +16,10 @@ if [[ -f "${ASDF_DOWNLOAD_PATH}/pre-commit" ]]; then
   mv "${ASDF_DOWNLOAD_PATH}/pre-commit" "${ASDF_INSTALL_PATH}/bin/pre-commit"
 else
   if command -v pip3 >/dev/null; then
+    echo "Installing pre-commit with pip3"
     pip3 install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"
   else
+    echo "Installing pre-commit with pip"
     pip install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"
   fi
 fi
