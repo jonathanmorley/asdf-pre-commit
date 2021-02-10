@@ -37,9 +37,6 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - name: which python3
-        run: which python3
-        continue-on-error: true
       # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
       - name: test plugin
         uses: asdf-vm/actions/plugin-test@v1
