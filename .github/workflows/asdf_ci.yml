@@ -10,7 +10,11 @@ jobs:
   plugin-test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os:
+          - ubuntu-16.04  # ubuntu-earliest
+          - ubuntu-latest
+          - macos-10.15  # macos-earliest
+          - macos-latest
         python: ['2.x', '3.x']
         version: ['2.6.0', 'latest']
     runs-on: ${{ matrix.os }}
