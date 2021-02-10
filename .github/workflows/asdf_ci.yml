@@ -25,8 +25,8 @@ jobs:
     steps:
       - name: Remove python
         run: |
-          rm -f $(which python)
-          rm -f $(which python3)
+          sudo rm -f $(which python)
+          sudo rm -f $(which python3)
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
