@@ -23,13 +23,16 @@ jobs:
           - 'latest'
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Which python3
-        run: which python3
+      - name: Remove python
+        run: |
+          rm -f $(which python)
+          rm -f $(which python3)
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - name: Which python3
+      - name: which python3
         run: which python3
+        continue-on-error: true
       # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
       - name: test plugin
         uses: asdf-vm/actions/plugin-test@v1
