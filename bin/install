@@ -8,14 +8,14 @@ if [[ -z "${ASDF_DOWNLOAD_PATH:-}" ]]; then
 
   # ignore errors, as we will check for the presence of the file below
   # shellcheck source=bin/download
-  "${DIR}/download" ||:
+  "${DIR}/download" || :
 fi
 
 if [[ -f "${ASDF_DOWNLOAD_PATH}/pre-commit" ]]; then
   mkdir -p "${ASDF_INSTALL_PATH}/bin"
   mv "${ASDF_DOWNLOAD_PATH}/pre-commit" "${ASDF_INSTALL_PATH}/bin/pre-commit"
 else
-  if command -v pip3 > /dev/null; then
+  if command -v pip3 >/dev/null; then
     pip3 install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"
   else
     pip install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"

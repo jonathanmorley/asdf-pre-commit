@@ -12,6 +12,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python: ['2.x', '3.x']
+        version: ['2.6.0', 'latest']
     runs-on: ${{ matrix.os }}
     steps:
       # Configures the python version used on GitHub-hosted runners
@@ -20,10 +21,11 @@ jobs:
           # The python version to configure
           python-version: ${{ matrix.python }}
       # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
-      - name: asdf_plugin_test
+      - name: test plugin
         uses: asdf-vm/actions/plugin-test@v1
         with:
           command: pre-commit --version
+          version: ${{ matrix.version }}
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }} # automatically provided
   lint:
