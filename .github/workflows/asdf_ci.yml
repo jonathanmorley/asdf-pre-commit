@@ -19,7 +19,8 @@ jobs:
           - '2.x'  # earliest
           - '3.x'  # latest
         version:
-          - '1.16.1'  # earliest
+          - '1.0.0'  # earliest
+          - '1.21.1'  # latest py2
           - 'latest'
         exclude:
           # pre-commit no longer supports python2
