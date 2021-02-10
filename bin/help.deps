@@ -2,13 +2,15 @@
 
 set -Eeo pipefail
 
-echo "bash
-curl
-grep
-cut
-sort
+echo "awk
+bash
 chmod
-python
+curl
+cut
+grep
 mkdir
 mv
+python
+sed
+sort
 xargs"
