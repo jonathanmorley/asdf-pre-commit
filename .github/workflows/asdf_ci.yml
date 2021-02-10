@@ -27,6 +27,8 @@ jobs:
         run: |
           sudo rm -f $(which python)
           sudo rm -f $(which python3)
+          sudo rm -f $(which pip)
+          sudo rm -f $(which pip3)
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
