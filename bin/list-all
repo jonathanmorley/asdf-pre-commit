@@ -4,12 +4,36 @@ set -Eeuo pipefail
 
 # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
 function fetch() {
-  curl -Ls ${GITHUB_API_TOKEN:+-H "Authorization: token ${GITHUB_API_TOKEN}"} "$@"
+  curl --silent --fail --show-error --location ${GITHUB_API_TOKEN:+-H "Authorization: token ${GITHUB_API_TOKEN}"} "$@"
 }
 
-fetch "https://api.github.com/repos/pre-commit/pre-commit/releases" |
-  grep -Eo '"tag_name":\s*"[^"]+"' |
-  cut -d\" -f4 |
-  cut -c2- |
-  sort --version-sort |
-  xargs
+function get_next() {
+  fetch --head "$@" |
+    grep -i "^link" |           # find the link header
+    cut -d: -f2- |              # value of the header
+    tr , \\n |                  # split the links
+    grep 'rel="next"' |         # find the next link
+    awk -F '<|>' '{ print $2 }' # extract URL from between angle-brackets
+}
+
+function fetch_paged() {
+  curr=$1
+
+  while :; do
+    fetch "${curr}"
+    curr="$(get_next "${curr}")" || break
+  done
+}
+
+function sort_versions() {
+  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
+    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n |
+    awk '{print $2}'
+}
+
+fetch_paged "https://api.github.com/repos/pre-commit/pre-commit/releases" |
+  grep -Eo '"tag_name":\s*"[^"]+"' | # find tags
+  cut -d\" -f4 |                     # get value from within second pair of quotes
+  cut -c2- |                         # remove leading 'v'
+  sort_versions |                    # sort
+  xargs                              # remove newlines

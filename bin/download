@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
 function fetch() {
-  curl -Ls ${GITHUB_API_TOKEN:+-H "Authorization: token ${GITHUB_API_TOKEN}"} "$@"
+  curl --silent --fail --show-error --location ${GITHUB_API_TOKEN:+-H "Authorization: token ${GITHUB_API_TOKEN}"} "$@"
 }
 
 if [[ "${ASDF_INSTALL_TYPE:-version}" == 'ref' ]]; then

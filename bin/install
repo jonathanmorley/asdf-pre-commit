@@ -6,9 +6,20 @@ if [[ -z "${ASDF_DOWNLOAD_PATH:-}" ]]; then
   DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
   export ASDF_DOWNLOAD_PATH="${ASDF_INSTALL_PATH}"
 
+  # ignore errors, as we will check for the presence of the file below
   # shellcheck source=bin/download
-  source "${DIR}/download"
+  "${DIR}/download" || :
 fi
 
-mkdir -p "${ASDF_INSTALL_PATH}/bin"
-mv "${ASDF_DOWNLOAD_PATH}/pre-commit" "${ASDF_INSTALL_PATH}/bin/pre-commit"
+if [[ -f "${ASDF_DOWNLOAD_PATH}/pre-commit" ]]; then
+  mkdir -p "${ASDF_INSTALL_PATH}/bin"
+  mv "${ASDF_DOWNLOAD_PATH}/pre-commit" "${ASDF_INSTALL_PATH}/bin/pre-commit"
+else
+  if command -v pip3 >/dev/null; then
+    echo "Installing pre-commit with pip3"
+    pip3 install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"
+  else
+    echo "Installing pre-commit with pip"
+    pip install --target="${ASDF_INSTALL_PATH}" pre-commit=="${ASDF_INSTALL_VERSION}"
+  fi
+fi
