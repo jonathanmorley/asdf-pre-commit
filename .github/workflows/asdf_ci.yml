@@ -15,16 +15,16 @@ jobs:
           - ubuntu-latest
           - macos-10.15  # macos-earliest
           - macos-latest
-        python: ['2.x', '3.x']
+        python:
+          - '2.x'  # earliest
+          - '3.x'  # latest
         version:
           - '1.16.1'  # earliest
           - 'latest'
     runs-on: ${{ matrix.os }}
     steps:
-      # Configures the python version used on GitHub-hosted runners
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
-          # The python version to configure
           python-version: ${{ matrix.python }}
       # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
       - name: test plugin
