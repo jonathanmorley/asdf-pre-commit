@@ -2,6 +2,8 @@
 
 load helpers
 
+bats_load_library "bats-assert"
+
 setup_file() {
   PLUGIN_DIR="${ASDF_PLUGIN_REPO}"
   export PLUGIN_DIR
@@ -60,6 +62,6 @@ get_versions_to_test() {
   install "$version"
 
   run "$ASDF_INSTALL_PATH/bin/pre-commit" --help
-  [ "$status" -eq 0 ]
-  [[ $output == *"pre-commit"* ]]
+  assert_success
+  assert_output --partial pre-commit
 }

@@ -40,7 +40,6 @@
           nativeCheckInputs = [
             pkgs.asdf-vm
             pkgs.mise
-            pkgs.bats
             pkgs.curl
             pkgs.git
             pkgs.gnutar
@@ -85,7 +84,7 @@
 
             declare -fx patchShebangs isScript
 
-            bats $src/tests/*.bats
+            ${pkgs.bats.withLibraries (p: [p.bats-support p.bats-assert])}/bin/bats $src/tests/*.bats
           '';
         };
       };
