@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -Eeo pipefail
-
-export PYTHONPATH="${PYTHONPATH:-}:${ASDF_INSTALL_PATH}"
