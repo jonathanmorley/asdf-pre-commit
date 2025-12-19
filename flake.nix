@@ -1,0 +1,93 @@
+{
+  description = "pre-commit plugin for the asdf version manager";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+  };
+
+  outputs = inputs @ {flake-parts, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [./treefmt.nix];
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+
+      perSystem = {
+        pkgs,
+        lib,
+        system,
+        ...
+      }: {
+        checks.bat = pkgs.stdenvNoCC.mkDerivation {
+          name = "bats-${system}";
+
+          __impure = true;
+
+          src = lib.fileset.toSource {
+            root = ./.;
+            fileset = lib.fileset.unions [
+              ./bin
+              ./tests
+              ./LICENSE
+            ];
+          };
+
+          nativeBuildInputs = [pkgs.git];
+          nativeCheckInputs = [
+            pkgs.asdf-vm
+            pkgs.mise
+            pkgs.bats
+            pkgs.curl
+            pkgs.git
+            pkgs.gnutar
+            pkgs.coreutils
+            pkgs.gnugrep
+            pkgs.gnused
+            pkgs.python315
+          ];
+
+          dontUnpack = true;
+          dontConfigure = true;
+          dontFixup = true;
+          doCheck = true;
+          dontInstall = true;
+
+          buildPhase = ''
+            mkdir -p $out
+
+            cp -r $src/bin $src/LICENSE $out/
+            chmod -R +x $out/bin/*
+            git -C $out init
+            git -C $out config user.name "Test Runner"
+            git -C $out config user.email "test@example.com"
+
+            # Patch shebangs (so asdf plugin test gets them when cloning)
+            patchShebangs $out/bin/*
+
+            git -C $out add .
+            git -C $out commit -m "Test snapshot" >/dev/null
+          '';
+
+          SSL_CERT_FILE =
+            if builtins.getEnv "SSL_CERT_FILE" != ""
+            then builtins.getEnv "SSL_CERT_FILE"
+            else "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
+          GITHUB_API_TOKEN = builtins.getEnv "GITHUB_TOKEN";
+
+          checkPhase = ''
+            export ASDF_PLUGIN_REPO="$out"
+            export HOME=$(mktemp -d)
+
+            declare -fx patchShebangs isScript
+
+            bats $src/tests/*.bats
+          '';
+        };
+      };
+    };
+}
