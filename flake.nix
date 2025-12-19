@@ -31,7 +31,6 @@
             root = ./.;
             fileset = lib.fileset.unions [
               ./bin
-              ./tests
               ./LICENSE
             ];
           };
@@ -84,7 +83,7 @@
 
             declare -fx patchShebangs isScript
 
-            ${pkgs.bats.withLibraries (p: [p.bats-support p.bats-assert])}/bin/bats $src/tests/*.bats
+            ${pkgs.bats.withLibraries (p: [p.bats-support p.bats-assert])}/bin/bats ${./tests}
           '';
         };
       };
