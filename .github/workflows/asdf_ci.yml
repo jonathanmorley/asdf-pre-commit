@@ -40,7 +40,7 @@ jobs:
           python-version: ${{ matrix.python }}
       # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
       - name: test plugin
-        uses: asdf-vm/actions/plugin-test@v1
+        uses: asdf-vm/actions/plugin-test@707e84f3ee349548310aeabdad0dd3bfcb9b69fa # v1.1.0
         with:
           command: pre-commit --version
           version: ${{ matrix.version }}
