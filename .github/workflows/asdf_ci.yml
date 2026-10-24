@@ -35,7 +35,7 @@ jobs:
             sudo rm -f $(which "${bin}")
             sudo rm -f $(which "${bin}3")
           done
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python }}
       # See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#example-github-action
